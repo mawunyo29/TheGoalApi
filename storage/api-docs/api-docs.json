@@ -1,0 +1,2066 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Laravel API",
+        "description": "Laravel API description",
+        "contact": {
+            "email": "admin@admin.fr"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "{schemes}://localhost",
+            "description": "Change the host",
+            "variables": {
+                "schemes": {
+                    "enum": [
+                        "https",
+                        "http"
+                    ],
+                    "default": "http"
+                }
+            }
+        }
+    ],
+    "paths": {
+        "/api/v1/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register",
+                "description": "Returns user data",
+                "operationId": "Register",
+                "requestBody": {
+                    "description": "Pass user data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "format": "name",
+                                        "example": "mawunyo"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "amdin@admin.fr"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User register successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/v1/categories": {
+            "get": {
+                "tags": [
+                    "Models Categories"
+                ],
+                "summary": "Get list of categories",
+                "description": "Returns list of categories",
+                "operationId": "getCategoriesList",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Category"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Models Categories"
+                ],
+                "summary": "Store new category",
+                "description": "Returns category data",
+                "operationId": "storeCategory",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreCategoryRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Category"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/categories/{id}": {
+            "get": {
+                "tags": [
+                    "Models Categories"
+                ],
+                "summary": "Get category information",
+                "description": "Returns category data",
+                "operationId": "getCategoryById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Category id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Category"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Category not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Models Categories"
+                ],
+                "summary": "Update existing category",
+                "description": "Returns updated category data",
+                "operationId": "updateCategory",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Category id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateCategoryRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Category"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Category not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Models Categories"
+                ],
+                "summary": "Delete existing category",
+                "description": "Deletes a record and returns no content",
+                "operationId": "deleteCategory",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Category id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Category not found"
+                    }
+                },
+                "security": [
+                    {
+                        "0": {
+                            "bearerAuth": []
+                        }
+                    }
+                ]
+            }
+        },
+        "/api/v1/categories/{id}/products": {
+            "get": {
+                "tags": [
+                    "Models Categories"
+                ],
+                "summary": "Get products by category",
+                "description": "Returns products by category",
+                "operationId": "getProductByCategory",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Category id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "Category not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users": {
+            "get": {
+                "tags": [
+                    "Models Users"
+                ],
+                "summary": "Get list of users",
+                "description": "Returns list of users",
+                "operationId": "index",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "John Doe"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "jhon@doe.com"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Models Users"
+                ],
+                "summary": "Store new user",
+                "description": "Returns user data",
+                "operationId": "storeUser",
+                "requestBody": {
+                    "description": "Pass user data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "format": "text",
+                                        "example": "John"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "mawunyo73@contact.fr"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User created successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{id}": {
+            "get": {
+                "tags": [
+                    "Models Users"
+                ],
+                "summary": "Get user information",
+                "description": "Returns user data",
+                "operationId": "showUser",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of user to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "format": "int64",
+                                            "example": "1"
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "format": "text",
+                                            "example": "John"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "format": "email",
+                                            "example": "jhon@contact.fr"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Models Users"
+                ],
+                "summary": "Update an existing user",
+                "description": "Returns updated user data",
+                "operationId": "updateUser",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of user to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Pass user data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "format": "text",
+                                        "example": "John"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "jhon@contact.fr"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User updated successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "405": {
+                        "description": "Validation exception"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Models Users"
+                ],
+                "summary": "Delete existing user",
+                "description": "Deletes a record and returns no content",
+                "operationId": "deleteUser",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of user to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products": {
+            "get": {
+                "tags": [
+                    "Models Products"
+                ],
+                "summary": "Get list of Products",
+                "description": "Returns list of Products",
+                "operationId": "getProductsList",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Product"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Models Products"
+                ],
+                "summary": "Store new product",
+                "description": "Returns product data",
+                "operationId": "productStore",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StoreProductRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/{id}": {
+            "get": {
+                "tags": [
+                    "Models Products"
+                ],
+                "summary": "Get product information",
+                "description": "Returns product data",
+                "operationId": "productShow",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Product id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Models Products"
+                ],
+                "summary": "Update existing product",
+                "description": "Returns updated product data",
+                "operationId": "productUpdate",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Product id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Product"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Models Products"
+                ],
+                "summary": "Delete existing product",
+                "description": "Deletes a record and returns no content",
+                "operationId": "productDestroy",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Product id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        " bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/products/name/{name}": {
+            "get": {
+                "tags": [
+                    "Models Products"
+                ],
+                "summary": "Get product by name",
+                "description": "Returns product data",
+                "operationId": "productGetByName",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "Product name",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/suppliers": {
+            "get": {
+                "tags": [
+                    "Models Suppliers"
+                ],
+                "description": "Returns list of suppliers",
+                "operationId": "getSuppliersList",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Supplier"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "503": {
+                        "description": "Service Unavailable"
+                    },
+                    "504": {
+                        "description": "Gateway Timeout"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    },
+                    "405": {
+                        "description": "Method Not Allowed"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    },
+                    "501": {
+                        "description": "Not Implemented"
+                    },
+                    "502": {
+                        "description": "Bad Gateway"
+                    },
+                    "505": {
+                        "description": "HTTP Version Not Supported"
+                    },
+                    "507": {
+                        "description": "Insufficient Storage"
+                    },
+                    "511": {
+                        "description": "Network Authentication Required"
+                    },
+                    "520": {
+                        "description": "Unknown Error"
+                    },
+                    "521": {
+                        "description": "Web Server Is Down"
+                    },
+                    "522": {
+                        "description": "Connection Timed Out"
+                    },
+                    "523": {
+                        "description": "Origin Is Unreachable"
+                    },
+                    "524": {
+                        "description": "A Timeout Occurred"
+                    },
+                    "525": {
+                        "description": "SSL Handshake Failed"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Models Suppliers"
+                ],
+                "summary": "Store new supplier",
+                "description": "Returns supplier data",
+                "operationId": "storeSupplier",
+                "requestBody": {
+                    "description": "Pass supplier data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/StoreSupplierRequest"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Supplier"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "503": {
+                        "description": "Service Unavailable"
+                    },
+                    "504": {
+                        "description": "Gateway Timeout"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    },
+                    "405": {
+                        "description": "Method Not Allowed"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    },
+                    "501": {
+                        "description": "Not Implemented"
+                    },
+                    "502": {
+                        "description": "Bad Gateway"
+                    },
+                    "505": {
+                        "description": "HTTP Version Not Supported"
+                    },
+                    "507": {
+                        "description": "Insufficient Storage"
+                    },
+                    "511": {
+                        "description": "Network Authentication Required"
+                    },
+                    "520": {
+                        "description": "Unknown Error"
+                    },
+                    "521": {
+                        "description": "Web Server Is Down"
+                    },
+                    "522": {
+                        "description": "Connection Timed Out"
+                    },
+                    "523": {
+                        "description": "Origin Is Unreachable"
+                    },
+                    "524": {
+                        "description": "A Timeout Occurred"
+                    },
+                    "525": {
+                        "description": "SSL Handshake Failed"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login",
+                "description": "Returns user data",
+                "operationId": "Login",
+                "requestBody": {
+                    "description": "Pass user data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "mawunyo73@contact.fr"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User login successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/v1/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout",
+                "description": "Returns user data",
+                "operationId": "Logout",
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User logout successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    },
+                    "503": {
+                        "description": "Service Unavailable"
+                    },
+                    "429": {
+                        "description": "Too Many Requests"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "405": {
+                        "description": "Method Not Allowed"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "RegisterRequest": {
+                "title": "Register Request",
+                "description": "Register Request body data",
+                "required": [
+                    "name",
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "format": "name",
+                        "example": "mawunyo"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "admin@admin.fr"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password",
+                        "example": "password"
+                    }
+                },
+                "type": "object"
+            },
+            "StoreCategoryRequest": {
+                "title": "StoreCategoryRequest",
+                "description": "Category model",
+                "properties": {
+                    "name": {
+                        "title": "name",
+                        "description": "name",
+                        "example": "Category name"
+                    },
+                    "description": {
+                        "title": "description",
+                        "description": "description",
+                        "example": "Category description"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "StoreCategoryRequest",
+                    "namespace": "App\\Http\\Requests"
+                }
+            },
+            "StoreProductRequest": {
+                "title": "StoreProductRequest",
+                "description": "Product model",
+                "properties": {
+                    "name": {
+                        "title": "name",
+                        "description": "name",
+                        "example": "Product name"
+                    },
+                    "description": {
+                        "title": "description",
+                        "description": "description",
+                        "example": "Product description"
+                    },
+                    "status": {
+                        "title": "status",
+                        "description": "status",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "price": {
+                        "title": "price",
+                        "description": "price",
+                        "type": "number",
+                        "format": "float",
+                        "example": 100
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "StoreProductRequest",
+                    "namespace": "App\\Http\\Requests"
+                }
+            },
+            "StoreSupplierRequest": {
+                "title": "StoreSupplierRequest",
+                "description": "Supplier model",
+                "properties": {
+                    "name": {
+                        "title": "name",
+                        "description": "name",
+                        "example": "Supplier name"
+                    },
+                    "email": {
+                        "title": "email",
+                        "description": "email",
+                        "type": "string",
+                        "format": "email",
+                        "example": "myemail@mydomain.fr"
+                    },
+                    "phone": {
+                        "title": "phone",
+                        "description": "phone",
+                        "type": "string",
+                        "format": "phone",
+                        "example": "0123456789"
+                    },
+                    "address": {
+                        "title": "address",
+                        "description": "address",
+                        "type": "string",
+                        "format": "address",
+                        "example": "My address"
+                    },
+                    "city": {
+                        "title": "city",
+                        "description": "city",
+                        "type": "string",
+                        "example": "My city"
+                    },
+                    "zip_code": {
+                        "title": "zip_code",
+                        "description": "zip_code",
+                        "type": "string",
+                        "format": "zip code",
+                        "example": "12345"
+                    },
+                    "country": {
+                        "title": "country",
+                        "description": "country",
+                        "type": "string",
+                        "example": "My country"
+                    },
+                    "status": {
+                        "title": "status",
+                        "description": "status",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "ref": {
+                        "title": "ref",
+                        "description": "ref",
+                        "type": "string",
+                        "example": "WxYz"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "StoreSupplierRequest",
+                    "namespace": "App\\Http\\Requests"
+                }
+            },
+            "UpdateCategoryRequest": {
+                "title": "UpdateCategoryRequest",
+                "description": "Category model",
+                "properties": {
+                    "name": {
+                        "title": "name",
+                        "description": "name",
+                        "example": "Category name"
+                    },
+                    "description": {
+                        "title": "description",
+                        "description": "description",
+                        "example": "Category description"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "UpdateCategoryRequest",
+                    "namespace": "App\\Http\\Requests"
+                }
+            },
+            "UpdateProductRequest": {
+                "title": "UpdateProduct",
+                "description": "Product model",
+                "properties": {
+                    "id": {
+                        "title": "id",
+                        "description": "name",
+                        "example": "1"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "UpdateProduct",
+                    "namespace": "App\\Http\\Requests"
+                }
+            },
+            "CategoryResource": {
+                "title": "Category",
+                "description": "Category model",
+                "properties": {
+                    "id": {
+                        "description": "Class CategoryResource.",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Category name"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Category description"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-01-01 00:00:00"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-01-01 00:00:00"
+                    },
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
+            "ProductResource": {
+                "title": "Product",
+                "description": "Product model",
+                "properties": {
+                    "id": {
+                        "description": "Class ProductResource.",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Product name"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Product description"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-01-01 00:00:00"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-01-01 00:00:00"
+                    },
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 100
+                    }
+                },
+                "type": "object"
+            },
+            "RegisterResponse": {
+                "title": "Register Response",
+                "description": "Register Response body data",
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "format": "message",
+                        "example": "Successfully created user!"
+                    }
+                },
+                "type": "object"
+            },
+            "Category": {
+                "title": "Category",
+                "description": "Product model",
+                "properties": {
+                    "id": {
+                        "title": "id",
+                        "description": "id",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "name": {
+                        "title": "name",
+                        "description": "name",
+                        "type": "string",
+                        "example": "Category name"
+                    },
+                    "description": {
+                        "title": "description",
+                        "description": "description",
+                        "type": "string",
+                        "example": "Category description"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Product",
+                    "namespace": "App\\Models"
+                }
+            },
+            "Product": {
+                "title": "Product",
+                "description": "Product model",
+                "properties": {
+                    "id": {
+                        "title": "id",
+                        "description": "id",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "name": {
+                        "title": "name",
+                        "description": "name",
+                        "type": "string",
+                        "example": "Product name"
+                    },
+                    "description": {
+                        "title": "description",
+                        "description": "description",
+                        "type": "string",
+                        "example": "Product description"
+                    },
+                    "created_at": {
+                        "title": "created_at",
+                        "description": "created_at",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-01-01 00:00:00"
+                    },
+                    "updated_at": {
+                        "title": "updated_at",
+                        "description": "updated_at",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-01-01 00:00:00"
+                    },
+                    "status": {
+                        "title": "status",
+                        "description": "status",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "price": {
+                        "title": "price",
+                        "description": "price",
+                        "type": "number",
+                        "format": "float",
+                        "example": 100
+                    },
+                    "categories": {
+                        "title": "categories",
+                        "description": "categories",
+                        "type": "object",
+                        "example": "Product categories"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Product",
+                    "namespace": "App\\Models"
+                }
+            },
+            "ProductCategory": {
+                "title": "Product Category",
+                "description": "Product model",
+                "properties": {
+                    "id": {
+                        "title": "id",
+                        "description": "id",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "product_id": {
+                        "title": "product_id",
+                        "description": "product_id",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "category_id": {
+                        "title": "category_id",
+                        "description": "category_id",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "sub_category_id": {
+                        "title": "sub_category_id",
+                        "description": "sub_category_id",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Product Category",
+                    "namespace": "App\\Models"
+                }
+            },
+            "Role": {
+                "title": "Role",
+                "description": "Role model",
+                "properties": {
+                    "id": {
+                        "title": "id",
+                        "description": "id",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "name": {
+                        "title": "name",
+                        "description": "name",
+                        "type": "string",
+                        "example": "Role name"
+                    },
+                    "description": {
+                        "title": "description",
+                        "description": "description",
+                        "type": "string",
+                        "example": "Role description"
+                    },
+                    "created_at": {
+                        "title": "created_at",
+                        "description": "created_at",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-01-01 00:00:00"
+                    },
+                    "updated_at": {
+                        "title": "updated_at",
+                        "description": "updated_at",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-01-01 00:00:00"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Role",
+                    "namespace": "App\\Models"
+                }
+            },
+            "Supplier": {
+                "title": "Supplier",
+                "description": "Supplier model",
+                "properties": {
+                    "id": {
+                        "title": "id",
+                        "description": "id",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "name": {
+                        "title": "name",
+                        "description": "name",
+                        "type": "string",
+                        "example": "Supplier name"
+                    },
+                    "ref": {
+                        "title": "description",
+                        "description": "reference",
+                        "type": "string",
+                        "example": "WxYz"
+                    },
+                    "status": {
+                        "title": "status",
+                        "description": "status",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "created_at": {
+                        "title": "created_at",
+                        "description": "created_at",
+                        "type": "string",
+                        "example": "2021-01-01 00:00:00"
+                    },
+                    "updated_at": {
+                        "title": "updated_at",
+                        "description": "updated_at",
+                        "type": "string",
+                        "example": "2021-01-01 00:00:00"
+                    },
+                    "deleted_at": {
+                        "title": "deleted_at",
+                        "description": "deleted_at",
+                        "type": "string",
+                        "example": "2021-01-01 00:00:00"
+                    },
+                    "phone": {
+                        "title": "phone",
+                        "description": "phone",
+                        "format": "string",
+                        "example": "0606060606"
+                    },
+                    "address": {
+                        "title": "address",
+                        "description": "address",
+                        "format": "string",
+                        "example": "1 rue de la paix"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Supplier",
+                    "namespace": "App\\Models"
+                }
+            },
+            "User": {
+                "title": "User",
+                "description": "User model",
+                "required": [
+                    "name",
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "api_token": {
+                        "type": "string",
+                        "example": "api_token"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "jhon@admin.fr"
+                    },
+                    "email_verified_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-05-05T12:00:00+00:00"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-05-05T12:00:00+00:00"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2021-05-05T12:00:00+00:00"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "apiKey",
+                "description": "Enter token in format (Bearer <token>)",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "API Endpoints of Auth"
+        },
+        {
+            "name": "Models Admins",
+            "description": "API Endpoints of Admins"
+        },
+        {
+            "name": "Models Users",
+            "description": "API Endpoints of Users"
+        },
+        {
+            "name": "Models Roles",
+            "description": "API Endpoints of Roles"
+        },
+        {
+            "name": "Models Permissions",
+            "description": "API Endpoints of Permissions"
+        },
+        {
+            "name": "Models Categories",
+            "description": "API Endpoints of Categories"
+        },
+        {
+            "name": "Models SubCategories",
+            "description": "API Endpoints of SubCategories"
+        },
+        {
+            "name": "Models Products",
+            "description": "API Endpoints of Products"
+        },
+        {
+            "name": "Models Orders",
+            "description": "API Endpoints of Orders"
+        },
+        {
+            "name": "Models OrderItems",
+            "description": "API Endpoints of OrderItems"
+        },
+        {
+            "name": "Models Carts",
+            "description": "API Endpoints of Carts"
+        },
+        {
+            "name": "Models CartItems",
+            "description": "API Endpoints of CartItems"
+        },
+        {
+            "name": "Models Addresses",
+            "description": "API Endpoints of Addresses"
+        },
+        {
+            "name": "Models Payments",
+            "description": "API Endpoints of Payments"
+        },
+        {
+            "name": "Models Coupons",
+            "description": "API Endpoints of Coupons"
+        },
+        {
+            "name": "Models Reviews",
+            "description": "API Endpoints of Reviews"
+        },
+        {
+            "name": "Models Wishlists",
+            "description": "API Endpoints of Wishlists"
+        },
+        {
+            "name": "Models WishlistItems",
+            "description": "API Endpoints of WishlistItems"
+        },
+        {
+            "name": "Models Settings",
+            "description": "API Endpoints of Settings"
+        },
+        {
+            "name": "Models Pages",
+            "description": "API Endpoints of Pages"
+        },
+        {
+            "name": "Models Sliders",
+            "description": "API Endpoints of Sliders"
+        },
+        {
+            "name": "Models Slides",
+            "description": "API Endpoints of Slides"
+        },
+        {
+            "name": "Models Menus",
+            "description": "API Endpoints of Menus"
+        },
+        {
+            "name": "Models MenuItems",
+            "description": "API Endpoints of MenuItems"
+        },
+        {
+            "name": "Models Faqs",
+            "description": "API Endpoints of Faqs"
+        },
+        {
+            "name": "Models FaqCategories",
+            "description": "API Endpoints of FaqCategories"
+        },
+        {
+            "name": "Models FaqQuestions",
+            "description": "API Endpoints of FaqQuestions"
+        },
+        {
+            "name": "Models Brands",
+            "description": "API Endpoints of Brands"
+        },
+        {
+            "name": "Models Tags",
+            "description": "API Endpoints of Tags"
+        },
+        {
+            "name": "Models Inventories",
+            "description": "API Endpoints of Inventories"
+        },
+        {
+            "name": "Models Suppliers",
+            "description": "API Endpoints of Suppliers"
+        }
+    ],
+    "security": [
+        {
+            "sanctum": [],
+            "bearerAuth": [
+                "read"
+            ]
+        }
+    ]
+}
