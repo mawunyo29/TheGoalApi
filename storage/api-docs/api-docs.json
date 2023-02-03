@@ -404,6 +404,56 @@
                 ]
             }
         },
+        "/api/v1/categories/{category:name}/products": {
+            "get": {
+                "tags": [
+                    "Models Categories"
+                ],
+                "summary": "Get products by category",
+                "description": "Returns product data",
+                "operationId": "getProductByCategoryName",
+                "parameters": [
+                    {
+                        "name": "category",
+                        "in": "path",
+                        "description": "Product category",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/v1/users": {
             "get": {
                 "tags": [
@@ -1662,6 +1712,30 @@
                     "namespace": "App\\Models"
                 }
             },
+            "Order": {
+                "title": "Order",
+                "description": "Order model",
+                "properties": {
+                    "id": {
+                        "title": "id",
+                        "description": "id",
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "name": {
+                        "title": "name",
+                        "description": "name",
+                        "type": "string",
+                        "example": "Order name"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Order",
+                    "namespace": "App\\Models"
+                }
+            },
             "Product": {
                 "title": "Product",
                 "description": "Product model",
@@ -1805,6 +1879,14 @@
                 "type": "object",
                 "xml": {
                     "name": "Role",
+                    "namespace": "App\\Models"
+                }
+            },
+            "SubCategory": {
+                "title": "SubCategory",
+                "description": "SubCategory model",
+                "xml": {
+                    "name": "SubCategory",
                     "namespace": "App\\Models"
                 }
             },

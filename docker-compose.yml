@@ -23,51 +23,8 @@ services:
         networks:
             - sail
         depends_on:
-            - mysql
-            - mysql2
-    mysql:
-        image: 'mysql/mysql-server:8.0'
-        container_name: mysql
-        ports:
-            - '${FORWARD_DB_PORT:-3307}:3306'
-        environment:
-            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
-            MYSQL_ROOT_HOST: "%"
-            MYSQL_DATABASE: '${DB_DATABASE}'
-            MYSQL_USER: '${DB_USERNAME}'
-            MYSQL_PASSWORD: '${DB_PASSWORD}'
-            MYSQL_ALLOW_EMPTY_PASSWORD: 1
-        volumes:
-            - 'sail-mysql:/var/lib/mysql'
-            - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
-        networks:
-            - sail
-        healthcheck:
-            test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
-            retries: 3
-            timeout: 5s
-    mysql2:
-        image: 'mysql/mysql-server'
-        container_name: mysql2
-        restart: unless-stopped
-        ports:
-            - '${FORWARD_DB_PORT:-3308}:3308'
-        environment:
-            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD_SECONDE}'
-            MYSQL_ROOT_HOST: "%"
-            MYSQL_DATABASE: '${DB_DATABASE_SECONDE}'
-            MYSQL_USER: '${DB_USERNAME_SECONDE}'
-            MYSQL_PASSWORD: '${DB_PASSWORD_SECONDE}'
-            MYSQL_ALLOW_EMPTY_PASSWORD: 1
-        volumes:
-            - 'mysql2:/var/lib/mysql'
-            - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
-        networks:
-            - sail
-        healthcheck:
-            test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD_SECONDE}"]
-            retries: 3
-            timeout: 5s
+            - phpmyadmin
+ 
     phpmyadmin:
         depends_on:
             - mysql
@@ -80,27 +37,12 @@ services:
             PMA_USER: '${DB_USERNAME}'
             PMA_PASSWORD: '${DB_PASSWORD}' 
         networks:
-            - sail 
-    phpmyadmin2:
-        depends_on:
-            - mysql2
-        image: 'phpmyadmin/phpmyadmin'
-        ports:
-            - '8081:80'
-        environment:
-            PMA_HOST: mysql2
-            PMA_PORT: 3306
-            PMA_USER: '${DB_USERNAME_SECONDE}'
-            PMA_PASSWORD: '${DB_PASSWORD_SECONDE}' 
-        networks:
-            - sail           
+            - sail         
 networks:
     sail:
         driver: bridge
 volumes:
-    sail-mysql:
-        driver: local
-    mysql2:
+      phpmyadmin:
         driver: local
 
 

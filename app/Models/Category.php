@@ -72,4 +72,13 @@ class Category extends Model
     {
         return $this->belongsToMany(Product::class, 'product_categories', 'category_id', 'product_id');
     }
+
+   /**
+    * get route key name
+    */
+
+    public function getRouteKeyName()
+    {
+        return 'name';
+    }
 }

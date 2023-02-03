@@ -21,21 +21,16 @@ Route::post('/v1/login', 'App\Http\Controllers\AuthApiController@login')->middle
 
 Route::post('/v1/register', 'App\Http\Controllers\Api\RegisterController@register')->middleware('web');
 
-Route::group(['mideleware' => 'auth:sanctum'], function () {
     Route::group(['namespace' => 'App\Http\Controllers\Api\v1\Admin'], function () {
         Route::apiResource('/v1/users', 'ManageUserController');
         Route::apiResource('/v1/roles', 'RoleController');
         Route::apiResource('/v1/permissions', 'PermissionController');
         Route::apiResource('/v1/products', 'ProductController');
         Route::apiResource('/v1/suppliers', 'SupplierController');
-        Route::get('/v1/products/name/{name}', 'ProductController@getProductByname');
+        Route::get('/v1/categories/{category:name}/products', 'CategoryController@getProductByname');
         Route::apiResource('/v1/categories', 'CategoryController');
         Route::get('v1/categories/{id}/products' , 'CategoryController@getProductByCategory');
-    });
-
-   
-    Route::post('/v1/logout', 'App\Http\Controllers\AuthApiController@logout');
-    
-});
+    })->middleware('auth:sanctum');
+Route::post('/v1/logout', 'App\Http\Controllers\AuthApiController@logout')->middleware('auth:sanctum');
 
 

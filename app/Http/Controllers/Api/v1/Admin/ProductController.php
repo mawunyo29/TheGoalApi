@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
+use App\Models\Category;
 use App\Models\Product;
+use DebugBar\DebugBar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
@@ -64,11 +67,13 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = Product::paginate(10);
-        if ($products->isEmpty()) {
-            return response()->json(['message' => 'No products found'], 404);
+        if (Auth::check()) {
+            $products = Product::paginate(10);
+            if ($products->isEmpty()) {
+                return response()->json(['message' => 'No products found'], 404);
+            }
+            return response()->json($products, 200);
         }
-        return response()->json($products, 200);
     }
 
     /**
@@ -166,14 +171,14 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::find($id);
-        if (Auth::check() ) {
+        if (Auth::check()) {
 
-            
+
             if (!$product) {
                 return response()->json(['message' => 'Product not found'], 404);
             }
             return response()->json($product, 200);
-        }else{
+        } else {
             return response()->json(['message' => 'You are not logged in'], 401);
         }
     }
@@ -326,11 +331,7 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
-    public function getProductByCategory($category)
-    {
-        $product = Product::where('category', $category)->first();
-        return response()->json($product);
-    }
+
 
     public function getProductByPrice($price)
     {

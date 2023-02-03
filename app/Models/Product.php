@@ -23,6 +23,7 @@ class Product extends Model
     use HasFactory;
     protected $table = 'products';
     protected $guarded = [];
+   
 
     /**
      * @OA\Property(
@@ -122,10 +123,10 @@ class Product extends Model
         return $this->belongsToMany(Category::class, 'product_categories', 'product_id', 'category_id');
     }
 
-    public function getRouteKeyName()
-    {
-        return 'slug';
-    }
+    // public function getRouteKeyName()
+    // {
+    //     return 'slug';
+    // }
     
 
     

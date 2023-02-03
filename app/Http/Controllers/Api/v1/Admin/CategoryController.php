@@ -15,13 +15,14 @@ use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
+    public $user;
     /**
      * security={{"bearerAuth":{}}}
      */
     public function __construct(Request $request)
     {
         $this->middleware('auth:sanctum');
-        $user = Auth::user();
+        $this->user = Auth::check();
         info($request . ' is logged in');
     }
 
@@ -98,7 +99,7 @@ class CategoryController extends Controller
         Debugbar::info('test');
         $guarduser = Auth::guard('sanctum')->user();
         info($guarduser . ' not logged in');
-       if(!Auth::check()){
+       if(!$this->user){
         
        
            return response()->json(['error' => 'Unauthenticated'], 401);
@@ -162,7 +163,7 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
 
-        if (!Auth::check() && !Auth::user()->tokenCan('authToken')) {
+        if (!$this->user && !Auth::user()->tokenCan('authToken')) {
             return response()->json(['error' => 'Unauthenficated'], 401);
         }
         try {
@@ -349,5 +350,63 @@ class CategoryController extends Controller
     {
         CategoryResource::withoutWrapping();
         return new CategoryResource(Category::find($id)->products()->paginate(10));
+    }
+
+     /**
+     * @OA\Get(
+     *     path="/api/v1/categories/{category:name}/products",
+     *    operationId="getProductByCategoryName",
+     *    tags={"Models Categories"},
+     *    security={{"bearerAuth":{}}},
+     *    @OA\Header(header="Authorization", description="Bearer auth token", required=true),
+     *    summary="Get products by category",
+     *    description="Returns product data",
+     *    @OA\Parameter(
+     *        name="category",
+     *        description="Product category",
+     *        required=true,
+     *        in="path",
+     *        @OA\Schema(
+     *            type="string",
+     *        )
+     *    ),
+     *    @OA\Response(
+     *        response=200,
+     *        description="Successful operation",
+     *        @OA\JsonContent(ref="#/components/schemas/Product"),
+     *     ),
+     *     @OA\Response(
+     *        response=400,
+     *        description="Invalid input",
+     *     ),
+     *     @OA\Response(
+     *        response=401,
+     *        description="Unauthenticated",
+     *     ),
+     *     @OA\Response(
+     *        response=403,
+     *        description="Forbidden",
+     *     ),
+     *     @OA\Response(
+     *        response=404,
+     *        description="Resource Not Found",
+     *     ),
+     * )
+     *
+     * @param [type] $category
+     * @return void
+     */
+    public function getProductByCategoryName($name)
+    {
+        if(!Auth::check()){
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+        if(!Category::where('name', $name)->first()){
+            return response()->json(['message' => 'Category not found'], 404);
+        }else{
+            $products = Category::where('name', $name)->first()->products()->paginate(10);
+            return response()->json($products);
+        }
+       
     }
 }

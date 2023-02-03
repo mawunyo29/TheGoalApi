@@ -52,14 +52,13 @@ class RegisterController extends Controller
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|confirmed'
         ]);
-        $user = new User([
+        dd($request->all());
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password)
         ]);
-        
-        $user->save();
-        $token = $user->createToken('token')->plainTextToken;
+        $token = $user->createToken('authToken')->accessToken;
         return response()->json([
             'message' => 'Successfully created user!',
             'token' => $token

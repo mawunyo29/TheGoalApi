@@ -60,17 +60,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public static function userAccessToken($token){
-       if(Auth::guard('sanctum')->check()){
-        $user = Auth::user();
-        $user->api_token = $token;
-        return $user;
+    // public static function userAccessToken($token){
+    //    if(Auth::guard('sanctum')->check()){
+    //     $user = Auth::user();
+    //     $user->api_token = $token;
+    //     return $user;
           
-       }else{
-           return null;
-       }
+    //    }else{
+    //        return null;
+    //    }
        
-    }
+    // }
 
     // public function getApiTokenAttribute(){
     //     if($this->tokens()->where('tokenable_id', Auth::user()->id)->first()){

@@ -32,8 +32,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-       if (config('auth.providers.users.model') === \App\Models\User::class) {
-            \Laravel\Sanctum\Sanctum::usePersonalAccessTokenModel(\App\Models\PersonalAccessToken::class);
-        }
+    //    if (config('auth.providers.users.model') === \App\Models\User::class) {
+    //         \Laravel\Sanctum\Sanctum::usePersonalAccessTokenModel(\App\Models\PersonalAccessToken::class);
+    //     }
     }
 }
